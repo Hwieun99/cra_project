@@ -8,18 +8,18 @@
   </tr>
   <tr>
     <td> D2 </td>
-    <td></td>
+    <td>O</td>
   </tr>
   <tr>
     <td> D3 </td>
-    <td></td>
+    <td>O</td>
   </tr>
   <tr>
     <td> D4 </td>
-    <td></td>
+    <td>O</td>
   </tr>
   <tr>
     <td> D5 </td>
-    <td> </td>
+    <td>O</td>
   </tr>
 </table>
