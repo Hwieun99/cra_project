@@ -7,19 +7,19 @@ from Calculator import GoldGradeCalculator
 class Manager:
     def __init__(self):
         self.id_cnt = 0
-        self.lst = {}
+        self.player_list = {}
         self.name_dict = {}
 
     def add_player(self, name):
-        self.lst[self.id_cnt] = Player(name, self.id_cnt)
+        self.player_list[self.id_cnt] = Player(name, self.id_cnt)
         self.name_dict[name] = self.id_cnt
 
     def print_fail_player_names(self):
         print("\nRemoved player")
         print("==============")
         for player_id in range(1, self.id_cnt + 1):
-            if self.lst[player_id].is_failed_player():
-                print(self.lst[player_id].name)
+            if self.player_list[player_id].is_failed_player():
+                print(self.player_list[player_id].name)
 
     def set_player_basic_point(self, name, day_str):
         if not self.is_valid_data(day_str):
@@ -30,11 +30,11 @@ class Manager:
         player_id = self.name_dict[name]
         day_idx = day_str_to_idx[day_str]
 
-        self.lst[player_id].point += PointCalculator().get_point(day_idx)
-        self.lst[player_id].set_attendance(day_idx)
+        self.player_list[player_id].point += PointCalculator().get_point(day_idx)
+        self.player_list[player_id].set_attendance(day_idx)
 
     def set_player_grade(self, player_id):
-        player = self.lst[player_id]
+        player = self.player_list[player_id]
         if player.point >= GOLD_MINIMUM:
             g_cal = GoldGradeCalculator()
         elif player.point >= SILVER_MINIMUM:
@@ -44,16 +44,16 @@ class Manager:
         player.grade = g_cal.get_grade()
 
     def set_player_bonus_point(self, player_id):
-        player = self.lst[player_id]
-        self.lst[player_id].point += TrainPointCalculator().get_point(player)
-        self.lst[player_id].point += WeekendPointCalculator().get_point(player)
+        player = self.player_list[player_id]
+        self.player_list[player_id].point += TrainPointCalculator().get_point(player)
+        self.player_list[player_id].point += WeekendPointCalculator().get_point(player)
 
     def print_player_point(self, player_id: int):
-        player = self.lst[player_id]
+        player = self.player_list[player_id]
         player.print_info()
 
     def print_player_grade(self, player_id: int):
-        player = self.lst[player_id]
+        player = self.player_list[player_id]
         g_cal = DefaultGradeCalculator()
         if player.grade == GOLD_GRADE:
             g_cal = GoldGradeCalculator()

@@ -4,7 +4,7 @@ from attendance import Manager, input_file
 def test_manager():
     manager = Manager()
     assert manager.id_cnt == 0
-    assert manager.lst == {}
+    assert manager.player_list == {}
     assert manager.name_dict == {}
 
 def test_add_player():
@@ -23,21 +23,21 @@ def test_set_player_basic_point():
     manager = Manager()
     manager.set_player_basic_point('Alex', 'monday')
     assert manager.id_cnt == 1
-    assert manager.lst[manager.id_cnt].name == 'Alex'
+    assert manager.player_list[manager.id_cnt].name == 'Alex'
     assert manager.name_dict['Alex'] == manager.id_cnt
 
 def test_set_player_grade():
     manager = Manager()
     manager.set_player_basic_point('Alex', 'monday')
     manager.set_player_grade(1)
-    player = manager.lst[1]
+    player = manager.player_list[1]
     assert player.grade == NORMAL_GRADE
 
-    manager.lst[1].point = GOLD_MINIMUM
+    manager.player_list[1].point = GOLD_MINIMUM
     manager.set_player_grade(1)
     assert player.grade == GOLD_GRADE
 
-    manager.lst[1].point = SILVER_MINIMUM
+    manager.player_list[1].point = SILVER_MINIMUM
     manager.set_player_grade(1)
     assert player.grade == SILVER_GRADE
 
@@ -45,21 +45,21 @@ def test_set_player_bonus_point_fail():
     manager = Manager()
     manager.set_player_basic_point('Alex', 'monday')
     manager.set_player_bonus_point(1)
-    assert manager.lst[1].point == 1
+    assert manager.player_list[1].point == 1
 
 def test_set_player_bonus_point_success():
     manager = Manager()
     for i in range(10):
         manager.set_player_basic_point('Alex', 'wednesday')
     manager.set_player_bonus_point(1)
-    assert manager.lst[1].point == 40
+    assert manager.player_list[1].point == 40
 
 def test_set_player_weekend_bonus_point_success():
     manager = Manager()
     for i in range(10):
         manager.set_player_basic_point('Alex', 'sunday')
     manager.set_player_bonus_point(1)
-    assert manager.lst[1].point == 30
+    assert manager.player_list[1].point == 30
 
 def test_print_player_point(capsys):
     manager = Manager()
@@ -75,12 +75,12 @@ def test_print_player_grade(capsys):
     output = capsys.readouterr()
     assert output.out == 'NORMAL\n'
 
-    manager.lst[1].grade = GOLD_GRADE
+    manager.player_list[1].grade = GOLD_GRADE
     manager.print_player_grade(1)
     output = capsys.readouterr()
     assert output.out == 'GOLD\n'
     #
-    manager.lst[1].grade = SILVER_GRADE
+    manager.player_list[1].grade = SILVER_GRADE
     manager.print_player_grade(1)
     output = capsys.readouterr()
     assert output.out == 'SILVER\n'
