@@ -1,2 +1,31 @@
 # cra_project
 CRA 10차수 리팩토링 공통과제입니다.
+<table>
+  <tr>
+    <td colspan="2" style="background-color: yellow">요구사항 체크리스트</td>
+  </tr>
+  <tr>
+    <td> D1 </td>
+    <td> O</td>
+  </tr>
+  <tr>
+    <td> D2 </td>
+    <td>O</td>
+  </tr>
+  <tr>
+    <td> D3 </td>
+    <td>O</td>
+  </tr>
+  <tr>
+    <td> D4 </td>
+    <td>O</td>
+  </tr>
+  <tr>
+    <td> D5 </td>
+    <td>O</td>
+  </tr>
+</table>
+<img src="./image1.JPG">
+<img src="./image2.JPG">
+<img src="./image3.JPG">
+
