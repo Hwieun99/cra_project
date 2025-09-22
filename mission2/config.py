@@ -5,7 +5,7 @@ TRAINED_POINT = 3
 BONUS_ATTENDANCE = 10
 BONUS_POINT = 10
 
-DAY_IDX_DICT = {
+day_str_to_idx = {
     "monday":0,
     "tuesday":1,
     "wednesday":2,
@@ -21,8 +21,4 @@ GOLD_GRADE = 1
 SILVER_GRADE = 2
 NORMAL_GRADE = 0
 WEEKEND_IDX = [5, 6]
-TRAINED_DAY_IDX = 2
-
-GOLD_GRADE = 1
-SILVER_GRADE = 2
-NORMAL_GRADE = 0
+TRAINED_DAY_IDX = [2]
