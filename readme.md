@@ -1,6 +1,25 @@
-| 요구사항 체크리스트 |
-| D1 | O |
-| D2 | |
-| D3 | |
-| D4 | |
-| D5 | |
+<table>
+  <tr>
+    <td colspan="2" style="background-color: yellow">요구사항 체크리스트</td>
+  </tr>
+  <tr>
+    <td> D1 </td>
+    <td> O</td>
+  </tr>
+  <tr>
+    <td> D2 </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td> D3 </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td> D4 </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td> D5 </td>
+    <td> </td>
+  </tr>
+</table>
