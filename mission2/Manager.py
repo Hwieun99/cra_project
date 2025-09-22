@@ -9,7 +9,6 @@ class Manager:
         self.id_cnt = 0
         self.lst = {}
         self.name_dict = {}
-        self.p_calc = PointCalculator()
 
     def add_player(self, name):
         self.lst[self.id_cnt] = Player(name, self.id_cnt)
@@ -31,7 +30,7 @@ class Manager:
         player_id = self.name_dict[name]
         day_idx = day_str_to_idx[day_str]
 
-        self.lst[player_id].point += self.p_calc.get_basic_attendance_point(day_idx)
+        self.lst[player_id].point += PointCalculator().get_basic_attendance_point(day_idx)
         self.lst[player_id].set_attendance(day_idx)
 
     def set_player_grade(self, player_id):
@@ -46,8 +45,8 @@ class Manager:
 
     def set_player_bonus_point(self, player_id):
         player = self.lst[player_id]
-        player.point += TrainPointCalculator().get_point(player)
-        player.point += WeekendPointCalculator().get_point(player)
+        self.lst[player_id].point += TrainPointCalculator().get_point(player)
+        self.lst[player_id].point += WeekendPointCalculator().get_point(player)
 
     def print_player_point(self, player_id: int):
         player = self.lst[player_id]

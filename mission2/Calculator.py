@@ -13,7 +13,7 @@ class Calculator:
 
 class PointCalculator(Calculator):
     @classmethod
-    def get_basic_attendance_point(self, day_idx) -> int:
+    def get_point(self, day_idx) -> int:
         if day_idx == TRAINED_DAY_IDX:
             return TRAINED_POINT
         elif day_idx in WEEKEND_IDX:

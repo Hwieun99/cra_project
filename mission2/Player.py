@@ -1,14 +1,12 @@
-WEEKEND_IDX = [5, 6]
-TRAINED_DAY_IDX = 2
-NORMAL_GRADE = 0
+from config import *
 
 class Player:
     def __init__(self, name, id_cnt):
         self.player_id = id_cnt
         self.name = name
-        self.grade = None
+        self.grade = 0
         self.point = 0
-        self.day = [0] * 100
+        self.day = [0] * MAX_DAY
         self.weekend_atd = 0
         self.train_atd = 0
 
