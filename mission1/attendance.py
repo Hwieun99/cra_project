@@ -94,23 +94,32 @@ def input_file():
             set_weekend_bonus_point(user_id)
             set_user_grade(user_id)
 
-            print(f"NAME : {names[user_id]}, POINT : {points[user_id]}, GRADE : ", end="")
-            if grade[user_id] == GOLD_GRADE:
-                print("GOLD")
-            elif grade[user_id] == SILVER_GRADE:
-                print("SILVER")
-            else:
-                print("NORMAL")
+            print_user_point(user_id)
+            print_user_grade(user_id)
 
-        print("\nRemoved player")
-        print("==============")
-        for user_id in range(1, ID_CNT + 1):
-            if is_failed_user(user_id):
-                print(names[user_id])
+        print_fail_user_names()
 
     except FileNotFoundError:
         print("파일을 찾을 수 없습니다.")
 
+def print_fail_user_names():
+    print("\nRemoved player")
+    print("==============")
+    for user_id in range(1, ID_CNT + 1):
+        if is_failed_user(user_id):
+            print(names[user_id])
+
+def print_user_grade(user_id: int):
+    if grade[user_id] == GOLD_GRADE:
+        print("GOLD")
+    elif grade[user_id] == SILVER_GRADE:
+        print("SILVER")
+    else:
+        print("NORMAL")
+
+
+def print_user_point(user_id: int):
+    print(f"NAME : {names[user_id]}, POINT : {points[user_id]}, GRADE : ", end="")
 
 def is_failed_user(user_id: int) -> bool:
     return grade[user_id] == NORMAL_GRADE and train_day_attendance[user_id] == 0 and weekend_attendance[user_id] == 0
