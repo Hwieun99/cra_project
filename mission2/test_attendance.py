@@ -1,107 +1,96 @@
 import pytest
+from config import *
+from attendance import Manager, input_file
+def test_manager():
+    manager = Manager()
+    assert manager.id_cnt == 0
+    assert manager.lst == {}
+    assert manager.name_dict == {}
 
-from attendance import weekend_attendance, set_user_attendance, user_id_to_day, is_valid_data, \
-    set_user_id_dict, names, ID_DICT, get_basic_attendance_point, WEEKEND_IDX, WEEKEND_POINT, TRAINED_POINT, \
-    TRAINED_DAY_IDX, is_failed_user, NORMAL_GRADE, grade, set_user_grade, points, set_weekend_bonus_point, BONUS_POINT, \
-    set_train_day_bonus_point, set_basic_point, input_file
-from attendance import train_day_attendance
-from mission2.attendance import GOLD_GRADE, SILVER_GRADE, GOLD_MINIMUM, SILVER_MINIMUM
+def test_add_player():
+    manager = Manager()
+    manager.add_player('Alex')
+    assert manager.name_dict['Alex'] == manager.id_cnt
 
-
-@pytest.fixture
-def shared_data():
-    return ID_DICT, names
-
-@pytest.fixture
-def shared_attendance():
-    return user_id_to_day, train_day_attendance, weekend_attendance
-
-@pytest.fixture
-def shared_grade():
-    return points, grade
-
-@pytest.mark.parametrize("day, result", [
-    ('monday', True),
-    ('monkey', False),
-    ('banana', False),
-    ('wednesday', True)
-])
-def test_is_valid_data(day, result):
-    assert is_valid_data(day) == result
-
-def test_set_user_id_dict(shared_data): # 다시
-    name_list = ['Alex', 'Cameron', 'Andre']
-    for idx, name in enumerate(name_list):
-        set_user_id_dict(name)
-        assert shared_data[0][name] == idx+1
-        assert shared_data[1][idx+1] == name
-
-def test_set_user_attendance(shared_attendance):
-    set_user_attendance(0, 1)
-    set_user_attendance(0, 1)
-    set_user_attendance(0, 2)
-    set_user_attendance(0, 5)
-    set_user_attendance(0, 6)
-    assert shared_attendance[0][0][1] == 2
-    assert shared_attendance[0][0][2] == 1
-    assert shared_attendance[0][0][3] == 0
-    assert shared_attendance[1][0] == 1
-    assert shared_attendance[2][0] == 2
-
-def test_get_basic_attendance_point():
-    point = get_basic_attendance_point(1)
-    assert point == 1
-    point = get_basic_attendance_point(TRAINED_DAY_IDX)
-    assert point == TRAINED_POINT
-    point = get_basic_attendance_point(5)
-    assert point == WEEKEND_POINT
-
-def test_is_failed_user():
-    grade[0] = NORMAL_GRADE
-    train_day_attendance[0] = 0
-    weekend_attendance[0] = 0
-    grade[1] = GOLD_GRADE
-    train_day_attendance[1] = 1
-    weekend_attendance[1] = 1
-    assert is_failed_user(0) == True
-    assert is_failed_user(1) == False
-
-
-def test_set_user_grade(shared_grade):
-    points = shared_grade[0]
-    points[0] = GOLD_MINIMUM
-    points[1] = SILVER_MINIMUM
-    points[2] = 1
-    set_user_grade(0)
-    set_user_grade(1)
-    set_user_grade(2)
-    assert shared_grade[1][0] == GOLD_GRADE
-    assert shared_grade[1][1] == SILVER_GRADE
-    assert shared_grade[1][2] == NORMAL_GRADE
-
-def test_set_weekend_bonus_point(shared_attendance, shared_grade):
-    user_id_to_day = shared_attendance[0]
-    user_id_to_day[0][5] = 4
-    user_id_to_day[0][6] = 6
-    set_weekend_bonus_point(0)
-    assert shared_grade[0][0] == BONUS_POINT
-
-
-def test_set_train_day_bonus_point(shared_attendance, shared_grade):
-    user_id_to_day = shared_attendance[0]
-    user_id_to_day[0][TRAINED_DAY_IDX] = 12
-    user_id_to_day[1][TRAINED_DAY_IDX] = 1
-    set_train_day_bonus_point(0)
-    assert shared_grade[0][0] == BONUS_POINT
-    assert shared_grade[0][1] == 0
-
-def test_set_basic_point(shared_grade, capsys):
-    set_basic_point("Alex", "wednesday")
-    assert shared_grade[0][1] == TRAINED_POINT
-
-    set_basic_point("Alex", "monkey")
+def test_print_fail_player_nams(capsys):
+    manager = Manager()
+    manager.set_player_basic_point('Alex', 'monday')
+    manager.print_fail_player_names()
     output = capsys.readouterr()
-    assert output.out == 'monkey is not a valid day\n'
+    assert output.out == '\nRemoved player\n==============\nAlex\n'
 
-def test_input_file():
+def test_set_player_basic_point():
+    manager = Manager()
+    manager.set_player_basic_point('Alex', 'monday')
+    assert manager.id_cnt == 1
+    assert manager.lst[manager.id_cnt].name == 'Alex'
+    assert manager.name_dict['Alex'] == manager.id_cnt
+
+def test_set_player_grade():
+    manager = Manager()
+    manager.set_player_basic_point('Alex', 'monday')
+    manager.set_player_grade(1)
+    player = manager.lst[1]
+    assert player.grade == NORMAL_GRADE
+
+    manager.lst[1].point = GOLD_MINIMUM
+    manager.set_player_grade(1)
+    assert player.grade == GOLD_GRADE
+
+    manager.lst[1].point = SILVER_MINIMUM
+    manager.set_player_grade(1)
+    assert player.grade == SILVER_GRADE
+
+def test_set_player_bonus_point_fail():
+    manager = Manager()
+    manager.set_player_basic_point('Alex', 'monday')
+    manager.set_player_bonus_point(1)
+    assert manager.lst[1].point == 1
+
+def test_set_player_bonus_point_success():
+    manager = Manager()
+    for i in range(10):
+        manager.set_player_basic_point('Alex', 'wednesday')
+    manager.set_player_bonus_point(1)
+    assert manager.lst[1].point == 40
+
+def test_set_player_weekend_bonus_point_success():
+    manager = Manager()
+    for i in range(10):
+        manager.set_player_basic_point('Alex', 'sunday')
+    manager.set_player_bonus_point(1)
+    assert manager.lst[1].point == 30
+
+def test_print_player_point(capsys):
+    manager = Manager()
+    manager.set_player_basic_point('Alex', 'monday')
+    manager.print_player_point(1)
+    output = capsys.readouterr()
+    assert output.out == 'NAME : Alex, POINT : 1, GRADE : '
+
+def test_print_player_grade(capsys):
+    manager = Manager()
+    manager.set_player_basic_point('Alex', 'monday')
+    manager.print_player_grade(1)
+    output = capsys.readouterr()
+    assert output.out == 'NORMAL\n'
+
+    manager.lst[1].grade = GOLD_GRADE
+    manager.print_player_grade(1)
+    output = capsys.readouterr()
+    assert output.out == 'GOLD\n'
+    #
+    manager.lst[1].grade = SILVER_GRADE
+    manager.print_player_grade(1)
+    output = capsys.readouterr()
+    assert output.out == 'SILVER\n'
+
+def test_is_valid_data(capsys):
+    manager = Manager()
+    manager.set_player_basic_point('Alex', 'monkey')
+    assert capsys.readouterr().out == 'monkey is not a valid day\n'
+
+def test_input_file(capsys):
     input_file()
+    output = capsys.readouterr()
+    assert output.out == '파일을 찾을 수 없습니다.\n'
