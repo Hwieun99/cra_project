@@ -1,0 +1,25 @@
+WEEKEND_IDX = [5, 6]
+TRAINED_DAY_IDX = 2
+NORMAL_GRADE = 0
+
+class Player:
+    def __init__(self, name, id_cnt):
+        self.player_id = id_cnt
+        self.name = name
+        self.grade = None
+        self.point = 0
+        self.day = [0] * 100
+        self.weekend_atd = 0
+        self.train_atd = 0
+
+    def set_attendance(self, day_idx):
+        self.day[day_idx] += 1
+        if day_idx == TRAINED_DAY_IDX:
+            self.train_atd += 1
+        elif day_idx in WEEKEND_IDX:
+            self.weekend_atd += 1
+
+    def is_failed_player(self):
+        return self.grade == NORMAL_GRADE and \
+            self.train_atd == 0 and \
+            self.weekend_atd == 0
