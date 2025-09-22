@@ -1,6 +1,8 @@
 from Player import Player
 from config import *
-from PointCalculator import PointCalculator
+from Calculator import PointCalculator, DefaultGradeCalculator, TrainPointCalculator, WeekendPointCalculator, \
+    SilverGradeCalculator
+from Calculator import GoldGradeCalculator
 
 class Manager:
     def __init__(self):
@@ -34,25 +36,31 @@ class Manager:
 
     def set_player_grade(self, player_id):
         player = self.lst[player_id]
-        grade = GradeCalc().get_grade(player.point)
-        player.grade = grade
+        if player.point >= GOLD_MINIMUM:
+            g_cal = GoldGradeCalculator()
+        elif player.point >= SILVER_MINIMUM:
+            g_cal = SilverGradeCalculator()
+        else:
+            g_cal = DefaultGradeCalculator()
+        player.grade = g_cal.get_grade()
 
     def set_player_bonus_point(self, player_id):
         player = self.lst[player_id]
-        point = self.p_calc.get_bonus_point()
+        player.point += TrainPointCalculator().get_point(player)
+        player.point += WeekendPointCalculator().get_point(player)
 
     def print_player_point(self, player_id: int):
         player = self.lst[player_id]
-        print(f"NAME : {player.name}, POINT : {player.point}, GRADE : ", end="")
+        player.print_info()
 
     def print_player_grade(self, player_id: int):
         player = self.lst[player_id]
+        g_cal = DefaultGradeCalculator()
         if player.grade == GOLD_GRADE:
-            print("GOLD")
+            g_cal = GoldGradeCalculator()
         elif player.grade == SILVER_GRADE:
-            print("SILVER")
-        else:
-            print("NORMAL")
+            g_cal = GoldGradeCalculator()
+        g_cal.print_grade()
 
     def is_valid_data(self, day_str):
         if day_str not in day_str_to_idx.keys():

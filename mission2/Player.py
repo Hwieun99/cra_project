@@ -19,6 +19,9 @@ class Player:
         elif day_idx in WEEKEND_IDX:
             self.weekend_atd += 1
 
+    def print_info(self):
+        print(f"NAME : {self.name}, POINT : {self.point}, GRADE : ", end="")
+
     def is_failed_player(self):
         return self.grade == NORMAL_GRADE and \
             self.train_atd == 0 and \
